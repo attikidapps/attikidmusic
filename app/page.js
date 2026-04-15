@@ -101,6 +101,7 @@ export default function Home() {
   const [bulkEdits, setBulkEdits] = useState({});
   const [bulkSaving, setBulkSaving] = useState(false);
   const [allComments, setAllComments] = useState([]);
+  const [songFiles, setSongFiles] = useState([]);
   const [mounted, setMounted] = useState(false);
 
   const audioRef = useRef(null);
@@ -347,6 +348,17 @@ export default function Home() {
     }
   }, []);
 
+  const fetchSongFiles = useCallback(async () => {
+    try {
+      const res = await fetch('/api/song-files');
+      const data = await res.json();
+      setSongFiles(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Failed to load song files', err);
+      setSongFiles([]);
+    }
+  }, []);
+
   const fetchComments = useCallback(async (songId) => {
     try {
       setCommentsLoading(true);
@@ -371,6 +383,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => { fetchSongs(); }, [fetchSongs]);
+  useEffect(() => { fetchSongFiles(); }, [fetchSongFiles]);
   useEffect(() => {
     // Re-check duplicates when songs list changes
     if (uploadItems.length > 0) {
@@ -919,6 +932,22 @@ export default function Home() {
                     </Card>
                   );
                 })}
+              </div>
+            )}
+              {songFiles.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4">Local MP3 Files</h2>
+                <div className="space-y-4">
+                  {songFiles.map((file) => (
+                    <div key={file} className="rounded-xl border border-border p-4 bg-background/80">
+                      <p className="text-sm font-medium mb-2 truncate">{file}</p>
+                      <audio controls className="w-full">
+                        <source src={`/songs/${encodeURIComponent(file)}`} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
