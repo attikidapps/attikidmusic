@@ -50,7 +50,6 @@ __pycache__/
 *pyc*
 
 .next
-.netlify
 node_modules
 venv/
 .venv/

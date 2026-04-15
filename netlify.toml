@@ -1,9 +1,0 @@
-[build]
-  command = "yarn build"
-    publish = ".next"
-
-    [[plugins]]
-      package = "@netlify/plugin-nextjs"
-
-      [functions]
-        external_node_modules = ["mongodb"]
