@@ -36,6 +36,13 @@ const nextConfig = {
       },
     ];
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = {
+    experimental: {
+        outputFileTracingExcludes: {
+              "*": ["./node_modules/aws-sdk/**/*"],
+                  },
+                    },
+                    };
+                  
