@@ -1,5 +1,6 @@
 'use client';
 
+import songData from "@/data/songs.json";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -142,7 +143,7 @@ export default function Home() {
   const playSongDirect = useCallback((song) => {
     const audio = audioRef.current;
     if (!audio || !song) return;
-    audio.src = `/songs/${song.filename}`;
+    audio.src = `/songs/${song.file}`;
     audio.load();
     audio.play().then(() => {
       setIsPlaying(true);
@@ -338,9 +339,8 @@ export default function Home() {
   const fetchSongs = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/songs');
-      const data = await res.json();
-      setSongs(data.songs || []);
+      // Static songs from JSON
+      setSongs(songData);
     } catch (err) {
       toast.error('Failed to load songs');
     } finally {
